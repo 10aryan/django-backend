@@ -57,7 +57,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # DATABASE (Render provides DATABASE_URL automatically)
 DATABASES = {
-    "default": dj_database_url.config(default=os.environ.get("DATABASE_URL"))
+    "default": dj_database_url.config(conn_max_age=600, ssl_require=True)
 }
 
 # REST FRAMEWORK
