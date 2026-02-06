@@ -10,8 +10,6 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-dev-key-123456")
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 ALLOWED_HOSTS = ["django-backend-5veu.onrender.com"]
 
-
-
 # APPLICATIONS
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -27,7 +25,7 @@ INSTALLED_APPS = [
 # MIDDLEWARE
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # Static files in production
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -55,7 +53,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# DATABASE (Render provides DATABASE_URL automatically)
+# DATABASE
 DATABASES = {
     "default": dj_database_url.config(conn_max_age=600, ssl_require=True)
 }
@@ -97,4 +95,3 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
