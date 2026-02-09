@@ -54,14 +54,9 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "indoai_db",
-        "USER": "postgres",
-        "PASSWORD": "aryan123",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
-    }
+    "default": dj_database_url.config(
+        default=os.environ.get("postgresql://django:8cJp3rqn6CkvbbT2NoRgWUp0tGuMsdmA@dpg-d6296o7pm1nc73fpcb2g-a/django_ps9z")
+    )
 }
 
 
