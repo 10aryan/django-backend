@@ -8,7 +8,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-dev-key-123456")
 DEBUG = os.environ.get("DEBUG", "False") == "True"
-ALLOWED_HOSTS = ["django-backend-5veu.onrender.com"]
+ALLOWED_HOSTS = [
+    "django-backend-5veu.onrender.com",
+    "127.0.0.1",
+    "localhost",
+]
+
 
 # APPLICATIONS
 INSTALLED_APPS = [
@@ -53,11 +58,29 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-DATABASES = {
-    "default": dj_database_url.config(
-        default=os.environ.get("postgresql://django:8cJp3rqn6CkvbbT2NoRgWUp0tGuMsdmA@dpg-d6296o7pm1nc73fpcb2g-a/django_ps9z")
-    )
-}
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+if DATABASE_URL:
+    # Render / Production
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=True,
+        )
+    }
+else:
+    # Local development
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "indoai_db",
+            "USER": "postgres",
+            "PASSWORD": "aryan123",
+            "HOST": "127.0.0.1",
+            "PORT": "5432",
+        }
+    }
 
 
 # REST FRAMEWORK
