@@ -53,10 +53,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# DATABASE
 DATABASES = {
-    "default": dj_database_url.config(conn_max_age=600, ssl_require=True)
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "indoai_db",
+        "USER": "postgres",
+        "PASSWORD": "aryan123",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
+    }
 }
+
 
 # REST FRAMEWORK
 REST_FRAMEWORK = {
