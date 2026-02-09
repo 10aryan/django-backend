@@ -1,8 +1,13 @@
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from devices.views import signup   # 👈 add this
 
 urlpatterns = [
+    # AUTH
+    path('api/signup/', signup),  # 👈 create user
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/', include('devices.urls')),  # include your app urls
+
+    # DEVICES
+    path('api/', include('devices.urls')),
 ]

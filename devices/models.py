@@ -13,7 +13,7 @@ class Device(models.Model):
 
 class PairingToken(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    token = models.CharField(max_length=6)
+    token = models.CharField(max_length=6, unique=True)
     expires_at = models.DateTimeField()
 
     def is_valid(self):
