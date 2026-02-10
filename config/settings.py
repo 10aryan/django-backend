@@ -12,13 +12,14 @@ ALLOWED_HOSTS = [
     "django-backend-5veu.onrender.com",
     "127.0.0.1",
     "localhost",
+    "192.168.1.5",
 ]
 
 
 # APPLICATIONS
 INSTALLED_APPS = [
     "django.contrib.admin",
-    "django.contrib.auth",
+    "django.contrib.auth", 
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",

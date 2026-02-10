@@ -22,6 +22,7 @@ def create_pairing_token(request):
 
 # Claim device (Camera)
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def claim_device(request):
     token = request.data.get('token')
     name = request.data.get('name', 'Unnamed Camera')
@@ -71,3 +72,18 @@ def signup(request):
 
     user = User.objects.create_user(username=username, password=password)
     return Response({"message": "User created"}, status=201)
+
+
+# HEARTBEAT VIEW
+@api_view(['POST'])
+def device_heartbeat(request):
+    device_id = request.data.get("device_id")
+
+    try:
+        device = Device.objects.get(id=device_id)
+        device.last_seen = timezone.now()
+        device.is_online = True
+        device.save()
+        return Response({"status": "alive"})
+    except Device.DoesNotExist:
+        return Response({"error": "Device not found"}, status=404)
