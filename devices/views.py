@@ -211,3 +211,5 @@ def device_heartbeat(request):
             {"error": "Device not found"},
             status=404
         )
+
+        
