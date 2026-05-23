@@ -1,23 +1,18 @@
 from pathlib import Path
 from datetime import timedelta
 import os
-import dj_database_url
+# import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY
-SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-dev-key-123456")
-DEBUG = os.environ.get("DEBUG", "False") == "True"
-ALLOWED_HOSTS = [
-    "django-backend-5veu.onrender.com",
-    "127.0.0.1",
-    "localhost",
-    "192.168.1.5",
-]
-
+SECRET_KEY = "django-insecure-change-this-to-a-very-long-random-secret-key-1234567890"
+DEBUG = True
+ALLOWED_HOSTS = ['34.100.152.110', '*']
 
 # APPLICATIONS
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth", 
     "django.contrib.contenttypes",
@@ -26,6 +21,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "devices",
+    "channels",
 ]
 
 # MIDDLEWARE
@@ -59,30 +55,31 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
+# Channels / ASGI
+ASGI_APPLICATION = "config.asgi.application"
+
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
-if DATABASE_URL:
-    # Render / Production
-    DATABASES = {
-        "default": dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-            ssl_require=True,
-        )
+# if DATABASE_URL:
+#     # Render / Production
+#     DATABASES = {
+#         "default": dj_database_url.config(
+#             default=DATABASE_URL,
+#             conn_max_age=600,
+#             ssl_require=True,
+#         )
+#     }
+# else:
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "indoai",
+        "USER": "indoai_user",
+        "PASSWORD": "indoai12345",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
     }
-else:
-    # Local development
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "indoai_db",
-            "USER": "postgres",
-            "PASSWORD": "aryan123",
-            "HOST": "127.0.0.1",
-            "PORT": "5432",
-        }
-    }
-
+}
 
 # REST FRAMEWORK
 REST_FRAMEWORK = {
@@ -121,3 +118,11 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}

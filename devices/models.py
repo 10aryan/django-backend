@@ -1,24 +1,74 @@
+# devices/models.py
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+import uuid
 
+
+# Stores paired camera devices
 class Device(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="devices")
+
+    # Device owner
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="devices"
+    )
+
+    # Camera name
     name = models.CharField(max_length=100)
+
+    # Online/offline status
     is_online = models.BooleanField(default=False)
-    last_seen = models.DateTimeField(null=True, blank=True)
+
+    # Last heartbeat time
+    last_seen = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    # Device creation time
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.name} ({'Online' if self.is_online else 'Offline'})"
+    # Permanent unique secret for reconnect/authentication
+    secret_key = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        unique=True
+    )
 
+    def __str__(self):
+        return self.name
+
+
+# Temporary token used during first-time pairing
 class PairingToken(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    token = models.CharField(max_length=6, unique=True)
+
+    # User who created token
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    # Pairing code
+    token = models.CharField(
+        max_length=6,
+        unique=True
+    )
+
+    # Token expiry time
     expires_at = models.DateTimeField()
 
+    # Prevent token reuse
+    used = models.BooleanField(default=False)
+
+    # Check token validity
     def is_valid(self):
-        return self.expires_at >= timezone.now()
+        return (
+            not self.used and
+            self.expires_at >= timezone.now()
+        )
 
     def __str__(self):
-        return f"{self.token} for {self.user.username}"
+        return self.token
